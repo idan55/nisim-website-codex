@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>הצהרת נגישות | עסיס הנדסה</title>
+    <meta
+      name="description"
+      content="הצהרת הנגישות של אתר עסיס הנדסה בהתאם לתקן הישראלי ת״י 5568 והנחיות WCAG."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Manrope:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="legal-page-body">
+    <a class="skip-link" href="#main-content">דלגו לתוכן המרכזי</a>
+
+    <button
+      class="accessibility-toggle"
+      id="accessibility-toggle"
+      type="button"
+      aria-haspopup="dialog"
+      aria-controls="accessibility-panel"
+      aria-expanded="false"
+    >
+      נגישות
+    </button>
+
+    <aside
+      class="accessibility-panel"
+      id="accessibility-panel"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="accessibility-title"
+      hidden
+    >
+      <div class="accessibility-panel__header">
+        <h2 id="accessibility-title">התאמות נגישות</h2>
+        <button class="accessibility-panel__close" id="close-panel" type="button" aria-label="סגירת חלון נגישות">
+          ×
+        </button>
+      </div>
+      <p class="accessibility-panel__text">
+        ניתן להתאים את התצוגה והקריאה באתר לפי הצורך.
+      </p>
+      <div class="accessibility-actions">
+        <button type="button" data-action="increase-text">הגדלת טקסט</button>
+        <button type="button" data-action="decrease-text">הקטנת טקסט</button>
+        <button type="button" data-action="toggle-contrast">ניגודיות גבוהה</button>
+        <button type="button" data-action="toggle-readable-font">פונט קריא</button>
+        <button type="button" data-action="toggle-underline-links">הדגשת קישורים</button>
+        <button type="button" data-action="toggle-stop-motion">עצירת אנימציות</button>
+        <button type="button" data-action="reset-accessibility">איפוס</button>
+      </div>
+    </aside>
+
+    <header class="site-header site-header--solid">
+      <div class="container site-header__inner">
+        <a class="brand" href="index.html">
+          <img class="brand__logo" src="assets/logo.png" alt="לוגו עסיס הנדסה" />
+          <span>
+            <span class="brand__eyebrow">Nisim Asis</span>
+            <span class="brand__title">עסיס הנדסה</span>
+          </span>
+        </a>
+        <nav class="main-nav" aria-label="ניווט ראשי">
+          <a href="index.html#services">שירותים</a>
+          <a href="index.html#about">אודות</a>
+          <a href="privacy.html">פרטיות</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="legal-page" id="main-content">
+      <div class="container legal-page__inner">
+        <p class="section-tag">הצהרת נגישות</p>
+        <h1>נגישות אתר עסיס הנדסה</h1>
+        <p>
+          אנחנו פועלים להנגשת האתר כדי לאפשר גלישה נוחה, מכבדת ושוויונית לכלל
+          המשתמשים, לרבות אנשים עם מוגבלות.
+        </p>
+
+        <section>
+          <h2>התקן שלפיו הונגש האתר</h2>
+          <p>
+            התאמות הנגישות באתר בוצעו בהתאם לתקנות שוויון זכויות לאנשים עם
+            מוגבלות (התאמות נגישות לשירות), התשע"ג-2013, לתקן הישראלי ת"י 5568
+            ובהתבסס על הנחיות WCAG 2.0 ברמת AA.
+          </p>
+        </section>
+
+        <section>
+          <h2>אמצעי נגישות עיקריים באתר</h2>
+          <ul>
+            <li>מבנה עמודים סמנטי הכולל כותרות, אזורי תוכן וניווט ברור.</li>
+            <li>אפשרות ניווט מלאה באמצעות מקלדת.</li>
+            <li>קישור דילוג מהיר לתוכן המרכזי.</li>
+            <li>התאמה לעבודה עם קוראי מסך.</li>
+            <li>יחסי ניגודיות משופרים ופוקוס ברור על רכיבים אינטראקטיביים.</li>
+            <li>כפתור נגישות עם פעולות להגדלת טקסט, הדגשת קישורים, עצירת אנימציות ועוד.</li>
+            <li>התאמה לתצוגה במובייל, טאבלט ומסך מחשב.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>שימוש במקלדת</h2>
+          <p>
+            ניתן לעבור בין קישורים ורכיבים באמצעות מקש <kbd>Tab</kbd>, לחזור
+            אחורה באמצעות <kbd>Shift + Tab</kbd>, ולהפעיל קישורים וכפתורים
+            באמצעות <kbd>Enter</kbd>.
+          </p>
+        </section>
+
+        <section>
+          <h2>סייגים לנגישות</h2>
+          <p>
+            למרות המאמצים, ייתכן שחלקים מסוימים באתר טרם הונגשו באופן מלא. אם
+            נתקלתם בקושי, נשמח לקבל פנייה ולטפל בנושא בהקדם.
+          </p>
+        </section>
+
+        <section>
+          <h2>רכז נגישות ויצירת קשר</h2>
+          <p>עסיס הנדסה</p>
+          <p>טלפון: <a href="tel:0542563557">054-256-3557</a></p>
+          <p>
+            דוא"ל:
+            <a href="mailto:nisimasis22@gmail.com">nisimasis22@gmail.com</a>
+          </p>
+          <p>כתובת: גינת אגוז 11א, בית אל</p>
+          <p>קבלת קהל בתיאום מראש.</p>
+        </section>
+
+        <section>
+          <h2>תאריך עדכון</h2>
+          <p>06 במאי 2026</p>
+        </section>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
