@@ -1,13 +1,17 @@
 const introScreen = document.getElementById("intro-screen");
 const siteShell = document.getElementById("site-shell");
+const navToggle = document.getElementById("nav-toggle");
+const mainNav = document.getElementById("main-nav");
 const accessibilityToggle = document.getElementById("accessibility-toggle");
 const accessibilityPanel = document.getElementById("accessibility-panel");
 const closePanelButton = document.getElementById("close-panel");
+const revealTargets = document.querySelectorAll("[data-reveal]");
 const storageKey = "asiseng-accessibility-settings";
 
-if ("scrollRestoration" in history) {
-  history.scrollRestoration = "manual";
-}
+const media = {
+  reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)"),
+  desktop: window.matchMedia("(min-width: 960px)"),
+};
 
 const state = {
   fontScale: 100,
@@ -23,6 +27,10 @@ const bodyClassMap = {
   underlineLinks: "accessibility-underline-links",
   stopMotion: "accessibility-stop-motion",
 };
+
+function shouldReduceMotion() {
+  return state.stopMotion || media.reducedMotion.matches;
+}
 
 function applyAccessibilityState() {
   document.documentElement.style.setProperty("--font-size-base", `${state.fontScale}%`);
@@ -48,6 +56,16 @@ function setPanelState(isOpen) {
   if (!accessibilityPanel || !accessibilityToggle) return;
   accessibilityPanel.hidden = !isOpen;
   accessibilityToggle.setAttribute("aria-expanded", String(isOpen));
+}
+
+function setNavState(isOpen) {
+  if (!mainNav || !navToggle) return;
+
+  const nextState = Boolean(isOpen && !media.desktop.matches);
+  mainNav.classList.toggle("is-open", nextState);
+  navToggle.setAttribute("aria-expanded", String(nextState));
+  navToggle.setAttribute("aria-label", nextState ? "סגירת תפריט" : "פתיחת תפריט");
+  document.body.classList.toggle("nav-open", nextState);
 }
 
 function handleAccessibilityAction(action) {
@@ -82,16 +100,54 @@ function handleAccessibilityAction(action) {
   }
 
   applyAccessibilityState();
+  initRevealObserver();
 }
 
 function initIntro() {
   if (!introScreen || !siteShell) return;
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const saveData = Boolean(connection && connection.saveData);
+  const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+  const introDelay = shouldReduceMotion() || saveData ? 0 : coarsePointer ? 380 : 720;
+
   window.setTimeout(() => {
     introScreen.classList.add("is-hidden");
     siteShell.classList.add("is-ready");
-  }, reduced ? 0 : 1200);
+  }, introDelay);
+}
+
+let revealObserver;
+
+function initRevealObserver() {
+  if (!revealTargets.length) return;
+
+  if (revealObserver) {
+    revealObserver.disconnect();
+  }
+
+  if (shouldReduceMotion()) {
+    revealTargets.forEach((element) => element.classList.add("is-visible"));
+    return;
+  }
+
+  revealTargets.forEach((element) => element.classList.remove("is-visible"));
+
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: "0px 0px -8% 0px",
+    },
+  );
+
+  revealTargets.forEach((element) => revealObserver.observe(element));
 }
 
 document.addEventListener("click", (event) => {
@@ -108,7 +164,32 @@ document.addEventListener("click", (event) => {
   ) {
     setPanelState(false);
   }
+
+  if (
+    mainNav &&
+    navToggle &&
+    mainNav.classList.contains("is-open") &&
+    !mainNav.contains(event.target) &&
+    event.target !== navToggle &&
+    !navToggle.contains(event.target)
+  ) {
+    setNavState(false);
+  }
 });
+
+if (navToggle) {
+  navToggle.addEventListener("click", () => {
+    setNavState(!mainNav.classList.contains("is-open"));
+  });
+}
+
+if (mainNav) {
+  mainNav.addEventListener("click", (event) => {
+    if (event.target.closest("a")) {
+      setNavState(false);
+    }
+  });
+}
 
 if (accessibilityToggle) {
   accessibilityToggle.addEventListener("click", () => {
@@ -123,13 +204,19 @@ if (closePanelButton) {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     setPanelState(false);
+    setNavState(false);
   }
+});
+
+media.desktop.addEventListener("change", () => {
+  setNavState(false);
+});
+
+media.reducedMotion.addEventListener("change", () => {
+  initRevealObserver();
 });
 
 loadAccessibilityState();
 applyAccessibilityState();
 initIntro();
-
-window.addEventListener("load", () => {
-  window.scrollTo(0, 0);
-});
+initRevealObserver();

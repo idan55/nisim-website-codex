@@ -80,12 +80,22 @@
               <span class="brand__title">עסיס הנדסה</span>
             </span>
           </a>
-          <nav class="main-nav" aria-label="ניווט ראשי">
+          <nav class="main-nav" id="main-nav" aria-label="ניווט ראשי">
             <a href="#services">שירותים</a>
             <a href="#about">אודות</a>
             <a href="#process">תהליך עבודה</a>
             <a href="#contact">צור קשר</a>
           </nav>
+          <button
+            class="nav-toggle"
+            id="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="main-nav"
+            aria-label="פתיחת תפריט"
+          >
+            <span class="nav-toggle__lines" aria-hidden="true"></span>
+          </button>
           <a class="call-chip" href="tel:0542563557">054-256-3557</a>
         </div>
       </header>
@@ -93,8 +103,9 @@
       <main id="main-content">
         <section class="hero" id="hero">
           <div class="hero__backdrop"></div>
+          <div class="hero__ambient" aria-hidden="true"></div>
           <div class="container hero__grid">
-            <div class="hero__content">
+            <div class="hero__content" data-reveal="delay-1">
               <p class="section-tag">ליווי הנדסי ברמה אחרת</p>
               <h1>
                 דיוק הנדסי, פיקוח בלתי מתפשר
@@ -116,7 +127,7 @@
               </ul>
             </div>
 
-            <div class="hero__card cinematic-card">
+            <div class="hero__card cinematic-card" data-reveal="delay-2">
               <div class="cinematic-card__line"></div>
               <p class="cinematic-card__label">מיקוד</p>
               <h2>מהרעיון ועד המסירה</h2>
@@ -140,9 +151,14 @@
               </div>
             </div>
 
-            <div class="hero__figure">
+            <div class="hero__figure" data-reveal>
               <div class="hero__figure-frame">
-                <img src="assets/stand1.png" alt="ניסים אסיס - עסיס הנדסה" />
+                <img
+                  src="assets/stand1.png"
+                  alt="ניסים אסיס - עסיס הנדסה"
+                  fetchpriority="high"
+                  decoding="async"
+                />
                 <div class="hero__figure-caption">
                   <span>Nisim Asis</span>
                   <strong>Owner / Engineering Lead</strong>
@@ -154,12 +170,12 @@
 
         <section class="services section" id="services">
           <div class="container">
-            <div class="section-heading">
+            <div class="section-heading" data-reveal>
               <p class="section-tag">שירותי הליבה</p>
               <h2>מעטפת הנדסית ברורה, מדויקת וישימה</h2>
             </div>
             <div class="cards-grid">
-              <article class="service-card">
+              <article class="service-card" data-reveal>
                 <p class="service-card__index">01</p>
                 <h3>פיקוח בנייה</h3>
                 <p>
@@ -167,7 +183,7 @@
                   ליווי לאורך הדרך ובקרה על איכות הביצוע וההתאמה לתכנון.
                 </p>
               </article>
-              <article class="service-card">
+              <article class="service-card" data-reveal="delay-1">
                 <p class="service-card__index">02</p>
                 <h3>כתבי כמויות</h3>
                 <p>
@@ -175,7 +191,7 @@
                   קבלנים ולהבנה אמיתית של היקף העבודה והעלות הצפויה.
                 </p>
               </article>
-              <article class="service-card">
+              <article class="service-card" data-reveal="delay-2">
                 <p class="service-card__index">03</p>
                 <h3>בדק בית ואיתור ליקויי בנייה</h3>
                 <p>
@@ -189,7 +205,7 @@
 
         <section class="about section section--muted" id="about">
           <div class="container about__grid">
-            <div class="about__content">
+            <div class="about__content" data-reveal>
               <p class="section-tag">אודות</p>
               <h2>ניסיון מעשי, אחריות מקצועית וראייה מלאה של הפרויקט</h2>
               <p>
@@ -211,9 +227,9 @@
                 </p>
               </div>
             </div>
-            <div class="about__panel">
+            <div class="about__panel" data-reveal="delay-1">
               <p class="about__panel-label">עקרונות העבודה</p>
-              <img class="about__panel-image" src="assets/bg12.png" alt="" />
+              <img class="about__panel-image" src="assets/bg12.png" alt="" loading="lazy" decoding="async" />
               <ul>
                 <li>בדיקה יסודית לפני כל החלטה הנדסית</li>
                 <li>שקיפות מול הלקוח לאורך כל התהליך</li>
@@ -226,22 +242,22 @@
 
         <section class="process section" id="process">
           <div class="container">
-            <div class="section-heading">
+            <div class="section-heading" data-reveal>
               <p class="section-tag">איך זה עובד</p>
               <h2>תהליך מסודר שמייצר שליטה וביטחון</h2>
             </div>
             <div class="timeline">
-              <article class="timeline__item">
+              <article class="timeline__item" data-reveal>
                 <span>01</span>
                 <h3>אפיון והבנת הצורך</h3>
                 <p>מגדירים מטרות, סוג הנכס, שלב הפרויקט והאתגרים המרכזיים.</p>
               </article>
-              <article class="timeline__item">
+              <article class="timeline__item" data-reveal="delay-1">
                 <span>02</span>
                 <h3>בדיקה מקצועית בשטח או בתכנון</h3>
                 <p>איסוף נתונים, בחינת מפרטים, כמויות, מסמכים ורמת ביצוע בפועל.</p>
               </article>
-              <article class="timeline__item">
+              <article class="timeline__item" data-reveal="delay-2">
                 <span>03</span>
                 <h3>המלצות וליווי להמשך</h3>
                 <p>הצגת ממצאים, תיעדוף פעולות ובניית דרך פעולה ברורה להמשך.</p>
@@ -252,7 +268,7 @@
 
         <section class="contact section section--accent" id="contact">
           <div class="container contact__grid">
-            <div>
+            <div data-reveal>
               <p class="section-tag">יצירת קשר</p>
               <h2>רוצים ליווי הנדסי מדויק? מתחילים כאן.</h2>
               <p>
@@ -260,7 +276,7 @@
                 וליווי בנייה ושיפוצים.
               </p>
             </div>
-            <div class="contact-card">
+            <div class="contact-card" data-reveal="delay-1">
               <a href="tel:0542563557">054-256-3557</a>
               <a href="mailto:nisimasis22@gmail.com">nisimasis22@gmail.com</a>
               <p>גינת אגוז 11א, בית אל</p>
