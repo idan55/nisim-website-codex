@@ -3,17 +3,11 @@ const siteShell = document.getElementById("site-shell");
 const accessibilityToggle = document.getElementById("accessibility-toggle");
 const accessibilityPanel = document.getElementById("accessibility-panel");
 const closePanelButton = document.getElementById("close-panel");
-const scrollProgressBar = document.getElementById("scroll-progress-bar");
-
-const revealElements = document.querySelectorAll(".reveal-on-scroll");
 const storageKey = "asiseng-accessibility-settings";
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
-
-window.scrollTo(0, 0);
 
 const state = {
   fontScale: 100,
@@ -41,9 +35,7 @@ function applyAccessibilityState() {
 
 function loadAccessibilityState() {
   const savedState = localStorage.getItem(storageKey);
-  if (!savedState) {
-    return;
-  }
+  if (!savedState) return;
 
   try {
     Object.assign(state, JSON.parse(savedState));
@@ -53,10 +45,7 @@ function loadAccessibilityState() {
 }
 
 function setPanelState(isOpen) {
-  if (!accessibilityPanel || !accessibilityToggle) {
-    return;
-  }
-
+  if (!accessibilityPanel || !accessibilityToggle) return;
   accessibilityPanel.hidden = !isOpen;
   accessibilityToggle.setAttribute("aria-expanded", String(isOpen));
 }
@@ -95,112 +84,14 @@ function handleAccessibilityAction(action) {
   applyAccessibilityState();
 }
 
-function initRevealOnScroll() {
-  if (!revealElements.length) {
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.16 }
-  );
-
-  revealElements.forEach((element) => observer.observe(element));
-}
-
 function initIntro() {
-  if (!introScreen || !siteShell) {
-    return;
-  }
+  if (!introScreen || !siteShell) return;
 
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   window.setTimeout(() => {
     introScreen.classList.add("is-hidden");
     siteShell.classList.add("is-ready");
-  }, 2000);
-}
-
-function smoothScrollTo(targetY) {
-  const startY = window.scrollY;
-  const distance = targetY - startY;
-  const duration = 820;
-  let startTime = null;
-
-  function easeInOutQuart(progress) {
-    return progress < 0.5
-      ? 8 * progress * progress * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 4) / 2;
-  }
-
-  function step(timestamp) {
-    if (startTime === null) {
-      startTime = timestamp;
-    }
-
-    const elapsed = timestamp - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    window.scrollTo(0, startY + distance * easeInOutQuart(progress));
-
-    if (progress < 1) {
-      window.requestAnimationFrame(step);
-    }
-  }
-
-  window.requestAnimationFrame(step);
-}
-
-function initSmoothAnchors() {
-  const anchors = document.querySelectorAll('a[href^="#"]');
-
-  anchors.forEach((anchor) => {
-    anchor.addEventListener("click", (event) => {
-      const href = anchor.getAttribute("href");
-      const target = href ? document.querySelector(href) : null;
-
-      if (!target) {
-        return;
-      }
-
-      event.preventDefault();
-      const headerOffset = document.querySelector(".site-header")?.offsetHeight ?? 0;
-      const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset - 24;
-      smoothScrollTo(Math.max(0, targetTop));
-      history.replaceState(null, "", href);
-    });
-  });
-}
-
-function initScrollEffects() {
-  let ticking = false;
-
-  function update() {
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
-    if (scrollProgressBar) {
-      scrollProgressBar.style.width = `${progress}%`;
-    }
-
-    ticking = false;
-  }
-
-  function requestUpdate() {
-    if (ticking) {
-      return;
-    }
-
-    ticking = true;
-    window.requestAnimationFrame(update);
-  }
-
-  requestUpdate();
-  window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", requestUpdate, { passive: true });
+  }, reduced ? 0 : 1200);
 }
 
 document.addEventListener("click", (event) => {
@@ -221,8 +112,7 @@ document.addEventListener("click", (event) => {
 
 if (accessibilityToggle) {
   accessibilityToggle.addEventListener("click", () => {
-    const isOpen = accessibilityPanel ? accessibilityPanel.hidden : false;
-    setPanelState(isOpen);
+    setPanelState(accessibilityPanel ? accessibilityPanel.hidden : false);
   });
 }
 
@@ -238,10 +128,7 @@ document.addEventListener("keydown", (event) => {
 
 loadAccessibilityState();
 applyAccessibilityState();
-initRevealOnScroll();
 initIntro();
-initSmoothAnchors();
-initScrollEffects();
 
 window.addEventListener("load", () => {
   window.scrollTo(0, 0);
