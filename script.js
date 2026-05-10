@@ -5,8 +5,15 @@ const mainNav = document.getElementById("main-nav");
 const accessibilityToggle = document.getElementById("accessibility-toggle");
 const accessibilityPanel = document.getElementById("accessibility-panel");
 const closePanelButton = document.getElementById("close-panel");
+const cookieBanner = document.getElementById("cookie-banner");
+const cookieAcceptButton = document.getElementById("cookie-accept");
+const projectsMapElement = document.getElementById("projects-map");
+const projectsMapShell = projectsMapElement ? projectsMapElement.closest(".projects-map-shell") : null;
 const revealTargets = document.querySelectorAll("[data-reveal]");
-const storageKey = "asiseng-accessibility-settings";
+const accessibilityStorageKey = "asiseng-accessibility-settings";
+const cookieConsentStorageKey = "asiseng-cookie-consent";
+const mapboxToken =
+  "pk.eyJ1IjoiaWRhbmg1IiwiYSI6ImNtcDAybXY4aDExZ3YycHNmeGN3cTkxeW8ifQ.vqvma0E55jOZdxpoQHoNBQ";
 
 const media = {
   reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)"),
@@ -28,8 +35,19 @@ const bodyClassMap = {
   stopMotion: "accessibility-stop-motion",
 };
 
+let revealObserver;
+let mapInstance;
+
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+
 function shouldReduceMotion() {
   return state.stopMotion || media.reducedMotion.matches;
+}
+
+function hasCookieConsent() {
+  return localStorage.getItem(cookieConsentStorageKey) === "accepted";
 }
 
 function applyAccessibilityState() {
@@ -38,17 +56,17 @@ function applyAccessibilityState() {
   document.body.classList.toggle(bodyClassMap.readableFont, state.readableFont);
   document.body.classList.toggle(bodyClassMap.underlineLinks, state.underlineLinks);
   document.body.classList.toggle(bodyClassMap.stopMotion, state.stopMotion);
-  localStorage.setItem(storageKey, JSON.stringify(state));
+  localStorage.setItem(accessibilityStorageKey, JSON.stringify(state));
 }
 
 function loadAccessibilityState() {
-  const savedState = localStorage.getItem(storageKey);
+  const savedState = localStorage.getItem(accessibilityStorageKey);
   if (!savedState) return;
 
   try {
     Object.assign(state, JSON.parse(savedState));
   } catch {
-    localStorage.removeItem(storageKey);
+    localStorage.removeItem(accessibilityStorageKey);
   }
 }
 
@@ -66,6 +84,59 @@ function setNavState(isOpen) {
   navToggle.setAttribute("aria-expanded", String(nextState));
   navToggle.setAttribute("aria-label", nextState ? "סגירת תפריט" : "פתיחת תפריט");
   document.body.classList.toggle("nav-open", nextState);
+}
+
+function setCookieBannerState(isVisible) {
+  if (!cookieBanner) return;
+
+  cookieBanner.hidden = !isVisible;
+  document.body.classList.toggle("cookie-banner-open", isVisible);
+}
+
+function initMapbox() {
+  if (!projectsMapElement || mapInstance || !hasCookieConsent()) return;
+  if (!window.mapboxgl) return;
+
+  window.mapboxgl.accessToken = mapboxToken;
+
+  mapInstance = new window.mapboxgl.Map({
+    container: projectsMapElement,
+    style: "mapbox://styles/mapbox/dark-v11",
+    center: [34.5969, 31.5242],
+    zoom: 11.4,
+    attributionControl: false,
+  });
+
+  mapInstance.addControl(
+    new window.mapboxgl.NavigationControl({
+      showCompass: false,
+    }),
+    "top-left",
+  );
+
+  mapInstance.addControl(new window.mapboxgl.AttributionControl({ compact: true }));
+
+  const marker = new window.mapboxgl.Marker({ color: "#d2a566" })
+    .setLngLat([34.5969, 31.5242])
+    .setPopup(
+      new window.mapboxgl.Popup({ offset: 18 }).setHTML(
+        "<strong>עסיס הנדסה ומבנים</strong><br>שדרות והסביבה",
+      ),
+    )
+    .addTo(mapInstance);
+
+  marker.togglePopup();
+
+  mapInstance.on("load", () => {
+    projectsMapShell?.classList.add("is-active");
+    mapInstance.resize();
+  });
+}
+
+function acceptCookies() {
+  localStorage.setItem(cookieConsentStorageKey, "accepted");
+  setCookieBannerState(false);
+  initMapbox();
 }
 
 function handleAccessibilityAction(action) {
@@ -117,7 +188,11 @@ function initIntro() {
   }, introDelay);
 }
 
-let revealObserver;
+function resetInitialScroll() {
+  window.requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+  });
+}
 
 function initRevealObserver() {
   if (!revealTargets.length) return;
@@ -201,6 +276,10 @@ if (closePanelButton) {
   closePanelButton.addEventListener("click", () => setPanelState(false));
 }
 
+if (cookieAcceptButton) {
+  cookieAcceptButton.addEventListener("click", acceptCookies);
+}
+
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     setPanelState(false);
@@ -210,13 +289,29 @@ document.addEventListener("keydown", (event) => {
 
 media.desktop.addEventListener("change", () => {
   setNavState(false);
+  if (mapInstance) {
+    window.requestAnimationFrame(() => mapInstance.resize());
+  }
 });
 
 media.reducedMotion.addEventListener("change", () => {
   initRevealObserver();
 });
 
+window.addEventListener("resize", () => {
+  if (mapInstance) {
+    window.requestAnimationFrame(() => mapInstance.resize());
+  }
+});
+
+window.addEventListener("pageshow", () => {
+  resetInitialScroll();
+});
+
 loadAccessibilityState();
 applyAccessibilityState();
+setCookieBannerState(!hasCookieConsent());
+resetInitialScroll();
 initIntro();
 initRevealObserver();
+initMapbox();

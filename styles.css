@@ -55,6 +55,10 @@ body.nav-open {
   overflow: hidden;
 }
 
+body.cookie-banner-open .accessibility-toggle {
+  bottom: 12rem;
+}
+
 body.accessibility-high-contrast {
   --surface: rgba(0, 0, 0, 0.98);
   --surface-strong: rgba(0, 0, 0, 0.98);
@@ -656,6 +660,77 @@ button:focus-visible {
   margin-bottom: 1.5rem;
 }
 
+.projects__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.projects__content,
+.projects__panel {
+  position: relative;
+}
+
+.projects__panel {
+  padding: 1.35rem;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.025)),
+    var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.projects__panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.projects__meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.projects-map-shell {
+  position: relative;
+  overflow: hidden;
+  min-height: 21rem;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(210, 165, 102, 0.14), transparent 30%),
+    linear-gradient(180deg, rgba(5, 12, 19, 0.96), rgba(8, 18, 28, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.projects-map {
+  position: absolute;
+  inset: 0;
+}
+
+.projects-map__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(3, 9, 14, 0.4), rgba(3, 9, 14, 0.68)),
+    radial-gradient(circle at center, rgba(210, 165, 102, 0.12), transparent 44%);
+}
+
+.projects-map-shell.is-active .projects-map__placeholder {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
 .cards-grid,
 .timeline {
   display: grid;
@@ -760,6 +835,29 @@ button:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.whatsapp-link__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: #25d366;
+  flex-shrink: 0;
+}
+
+.whatsapp-link__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
 .site-footer {
   padding: 1.4rem 0 2.4rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -786,11 +884,81 @@ button:focus-visible {
   color: var(--muted);
 }
 
+.site-credit {
+  margin-top: 0.9rem !important;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.site-credit a {
+  color: var(--accent-strong);
+}
+
 .footer-nav {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
   width: 100%;
+}
+
+.cookie-banner {
+  position: fixed;
+  right: 0.75rem;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 55;
+}
+
+.cookie-banner__content {
+  padding: 1.2rem;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(241, 197, 140, 0.12), rgba(255, 255, 255, 0.03)),
+    rgba(6, 14, 21, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.34);
+}
+
+.cookie-banner__eyebrow {
+  margin: 0 0 0.45rem;
+  font-family: "Manrope", sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.cookie-banner h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.2rem;
+}
+
+.cookie-banner p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.cookie-banner__actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.cookie-banner__button {
+  min-height: 3rem;
+}
+
+.cookie-banner__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .accessibility-toggle {
@@ -925,6 +1093,16 @@ button:focus-visible {
     grid-template-columns: repeat(2, auto);
     width: auto;
   }
+
+  .cookie-banner {
+    left: auto;
+    width: min(34rem, calc(100% - 1.5rem));
+  }
+
+  .cookie-banner__actions {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
 }
 
 @media (min-width: 960px) {
@@ -994,7 +1172,8 @@ button:focus-visible {
   }
 
   .about__grid,
-  .contact__grid {
+  .contact__grid,
+  .projects__grid {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     gap: 2rem;
   }
