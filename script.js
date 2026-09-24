@@ -119,8 +119,8 @@ function initMapbox() {
   const marker = new window.mapboxgl.Marker({ color: "#d2a566" })
     .setLngLat([34.5969, 31.5242])
     .setPopup(
-      new window.mapboxgl.Popup({ offset: 18 }).setHTML(
-        "<strong>עסיס הנדסה ומבנים</strong><br>שדרות והסביבה",
+      new window.mapboxgl.Popup({ offset: 18, focusAfterOpen: false }).setHTML(
+        "<strong>עסיס הנדסה ומבנים</strong>",
       ),
     )
     .addTo(mapInstance);
@@ -190,7 +190,7 @@ function initIntro() {
 
 function resetInitialScroll() {
   window.requestAnimationFrame(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   });
 }
 

@@ -181,6 +181,18 @@ button:focus-visible {
   color: var(--accent-strong);
 }
 
+.section-tag,
+.about .section-tag,
+.about__panel-label,
+.about .about__panel-label,
+.cinematic-card__label {
+  font-family: "Heebo", sans-serif;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: normal;
+}
+
 .intro-screen__title {
   margin: 1rem 0 0.45rem;
   font-size: clamp(2.8rem, 12vw, 5.6rem);
@@ -585,8 +597,9 @@ button:focus-visible {
 
 .hero__figure-frame {
   position: relative;
-  width: min(100%, 28rem);
-  padding: 1rem 1rem 4rem;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
   overflow: hidden;
   border-radius: 2rem;
   background:
@@ -611,8 +624,9 @@ button:focus-visible {
   z-index: 1;
   display: block;
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
 }
 
 .hero__figure-caption {
@@ -710,6 +724,21 @@ button:focus-visible {
 .projects-map {
   position: absolute;
   inset: 0;
+}
+
+.projects-map .mapboxgl-popup-content {
+  background: #fff;
+  color: #071019;
+  font-family: "Heebo", sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  direction: rtl;
+  text-align: right;
+  padding: 1.25rem 1.5rem 1rem;
+}
+
+.projects-map .mapboxgl-popup-close-button {
+  color: #071019;
 }
 
 .projects-map__placeholder {
@@ -821,18 +850,37 @@ button:focus-visible {
 
 .contact-card {
   display: grid;
+  justify-items: center;
   gap: 0.8rem;
-  padding: 1.5rem;
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  text-align: center;
   border-radius: var(--radius-lg);
   background:
     linear-gradient(135deg, rgba(241, 197, 140, 0.14), rgba(255, 255, 255, 0.02)),
     rgba(11, 27, 39, 0.88);
 }
 
+.contact-card h2 {
+  margin: 0 0 0.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+  font-size: clamp(2.45rem, 7vw, 4rem);
+  line-height: 1.1;
+  color: var(--accent-strong);
+}
+
 .contact-card a {
-  font-size: 1.15rem;
+  font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
   overflow-wrap: anywhere;
+}
+
+.contact-card a[href^="tel:"] {
+  direction: ltr;
 }
 
 .whatsapp-link {
@@ -1155,16 +1203,20 @@ button:focus-visible {
   }
 
   .hero__content {
-    grid-row: 1 / span 2;
     padding: 2rem 0;
   }
 
   .hero__card {
-    align-self: end;
+    align-self: center;
   }
 
   .hero__figure {
+    grid-column: 1 / -1;
     align-self: start;
+  }
+
+  .hero__figure-frame {
+    aspect-ratio: 21 / 9;
   }
 
   .hero__highlights {
@@ -1172,7 +1224,6 @@ button:focus-visible {
   }
 
   .about__grid,
-  .contact__grid,
   .projects__grid {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     gap: 2rem;
@@ -1222,7 +1273,7 @@ button:focus-visible {
   }
 
   .hero__figure-frame {
-    padding: 0.7rem 0.7rem 3.8rem;
+    border-radius: 1.25rem;
   }
 
   .accessibility-toggle {
